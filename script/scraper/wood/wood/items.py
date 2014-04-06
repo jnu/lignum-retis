@@ -1,11 +1,9 @@
-#-*-coding:utf8-*-
-'''
-Schema for the wood database
+# Define here the models for your scraped items
+#
+# See documentation in:
+# http://doc.scrapy.org/en/latest/topics/items.html
 
-Copyright 2014 Joe Nudell
-'''
-
-from scrapy.item import item, field
+from scrapy.item import Item, Field
 
 class WoodItem(Item):
     common_name = Field()
@@ -32,6 +30,8 @@ class WoodItem(Item):
     shrinkage_volumetric = Field()
     shrinkage_tr_ratio = Field()
 
+    wood_type = Field()
+
     text_color = Field()
     text_grain = Field()
     text_endgrain = Field()
@@ -45,4 +45,6 @@ class WoodItem(Item):
     text_comments = Field()
     text_related = Field()
 
-    bin_pics = Field()
+    url_pics = Field()
+
+    url = Field()
