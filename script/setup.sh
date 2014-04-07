@@ -26,7 +26,7 @@ done
 
 echo "Checking dependencies ..."
 command -v postgres >/dev/null 2>&1 || brew install postgres
-command -v ./ENV/bin/python2.7 >/dev/null 2>&1 || easy_install virtualenv && virtualenv ENV
+command -v ./env/bin/python2.7 >/dev/null 2>&1 || easy_install virtualenv && virtualenv env
 
 # install JS dependencies
 npm install -g grunt grunt-cli nodemon
