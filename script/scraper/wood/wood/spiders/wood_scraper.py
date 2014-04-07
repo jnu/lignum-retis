@@ -189,7 +189,7 @@ class WoodSpider(CrawlSpider):
         gr_text = get('Specific Gravity (Basic, 12% MC)')
         gravity = read_comma_number_line(gr_text, 2)
         wood['specific_gravity_basic'] = seal(gravity[0])
-        wood['speicifc_gravity_12pct'] = seal(gravity[1])
+        wood['specific_gravity_12pct'] = seal(gravity[1])
 
         # hardness
         janka = read_janka(get('Janka Hardness'))

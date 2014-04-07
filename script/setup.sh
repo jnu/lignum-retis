@@ -92,7 +92,7 @@ else
     FULL_FILE_PATH="$PWD/$DATA_DIR/$DATA_FILE"
     interesting "Found file '$FULL_FILE_PATH'"
     info "Populating database ..."
-    python script/reset_db.py "$FULL_FILE_PATH"
+    python script/reset_db.py "$PG_USER" "$FULL_FILE_PATH"
 fi
 
 # clean up

@@ -16,7 +16,7 @@ class WoodItem(Item):
     average_dried_weight_imperial = Field()
     average_dried_weight_metric = Field()
     specific_gravity_basic = Field()
-    speicifc_gravity_12pct = Field()
+    specific_gravity_12pct = Field()
     janka_hardness_imperial = Field()
     janka_hardness_metric = Field()
     modulus_of_rupture_imperial = Field()
