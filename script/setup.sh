@@ -47,7 +47,9 @@ info "Switching to local Python virtual environment ..."
 source $ENV_ROOT/bin/activate
 
 info "Installing Python dependencies ..."
-sudo pip install -r requirements.txt
+export CFLAGS=-Qunused-arguments
+export CPPFLAGS=-Qunused-arguments
+pip install -r requirements.txt
 
 # set up postgres
 info "(Re)initializing postgres ..."
