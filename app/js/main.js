@@ -6,14 +6,14 @@
 
 require.config({
 
-    baseUrl: '/js',
+    baseUrl: '/js/modules',
 
     paths: {
-        text        : 'lib/require-text',
-        zepto       : 'lib/zepto',
-        underscore  : 'lib/underscore',
-        d3          : 'lib/d3',
-        crossfilter : 'lib/crossfilter'
+        text        : '../lib/require-text',
+        zepto       : '../lib/zepto',
+        underscore  : '../lib/underscore',
+        d3          : '../lib/d3',
+        crossfilter : '../lib/crossfilter'
     },
 
     shim: {
@@ -37,7 +37,7 @@ require.config({
 // start app
 require([
     'zepto',
-    'app'
+    '../app'
 ],
 function(
     Zepto,
