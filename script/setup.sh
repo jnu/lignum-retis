@@ -7,7 +7,7 @@
 PG_USER="lignum"
 PG_PASS="password"
 DATA_DIR="raw"
-ENV_ROOT="env"
+
 ENV=${1:-local}
 
 # get script directory
@@ -30,8 +30,7 @@ sudo npm install -g grunt grunt-cli nodemon
 sudo npm install
 
 # install python dependencies (in virtual environment)
-info "Switching to local Python virtual environment ..."
-source $ENV_ROOT/bin/activate
+govirtual
 
 info "Installing Python dependencies ..."
 export CFLAGS=-Qunused-arguments

@@ -11,6 +11,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$DIR/common.sh"
 
 findroot
+govirtual
 
 # start postgres
 info "Starting postgres ..."
@@ -19,10 +20,10 @@ PG_PID=$!
 
 # start uwsgi
 info "Starting uwsgi ..."
-cd server
+cd app/api
 uwsgi -s /tmp/lignum_uwsgi.sock -w wood:app --chmod-socket=666 &
 UW_PID=$!
-cd ..
+cd ../..
 
 
 # wait for postgres to finish launching
@@ -45,6 +46,7 @@ sudo nginx
 # kill all launched processes
 function cleanup {
     info "Cleaning up ..."
+    deactivate
     kill $PG_PID
     kill $UW_PID
     exit $?

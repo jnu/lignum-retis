@@ -14,7 +14,7 @@ from wood_fields import table_name
 ##
 
 # The fields to show in a basic query
-out_basic_fields = [
+out_basic_fields = {
     'name': 'common_name',
     'height': 'tree_height_imperial',
     'diameter': 'tree_diameter_imperial',
@@ -30,7 +30,7 @@ out_basic_fields = [
     'shrinkVolumetric': 'shrinkage_volumetric',
     'shrinkTr': 'shrinkage_tr_ratio',
     'type': 'wood_type'
-]
+}
 _out_basic_outnames = out_basic_fields.keys()
 _out_basic_intnames = out_basic_fields.values()
 _out_basic_sql = "SELECT %s FROM %s" % (
@@ -43,6 +43,9 @@ _out_basic_sql = "SELECT %s FROM %s" % (
 # execute basic query (some info about all woods in DB)
 def get_basic(cur):
     cur.execute(_out_basic_sql)
-    one = cur.fetchone()
-    d = dict([_out_basic_outnames[i], k for i, k in enumerate(one)])
-    return d
+    records = cur.fetchall()
+    lst = []
+    for r in records:
+        d = dict([[_out_basic_outnames[i], k] for i, k in enumerate(r)])
+        lst.append(d)
+    return lst

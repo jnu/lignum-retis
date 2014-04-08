@@ -5,32 +5,15 @@ to the nginx config root.
 Copyright 2014 Joe Nudell
 '''
 
+import sys
 from sys import argv, stderr
 import os
 
 real_path = os.path.dirname(__file__)
 conf_rel = '../conf'
 conf_full_path = os.path.join(real_path, conf_rel)
-name = 'lignum'
-
-script_dir = os.path.dirname(os.path.abspath(__file__))
-rel_root = os.path.join(script_dir, '..')
-abs_root = os.path.abspath(rel_root)
-
-
-# Define environments here
-config = {
-    'local': {
-        'nginx': {
-            'port': 5000,
-            'name': '_',
-            'root': abs_root,
-        },
-        'conf_dir': '/usr/local/etc/nginx/sites-available'
-    }
-}
-
-
+sys.path.append(conf_full_path)
+from config import config, name
 
 
 if __name__ == '__main__':

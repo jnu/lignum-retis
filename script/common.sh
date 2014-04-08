@@ -1,6 +1,7 @@
 # Some utility functions
 
 ROOT="lignum-retis"
+ENV_ROOT="env"
 
 
 # Colorize bash output
@@ -93,4 +94,10 @@ findroot () {
         fi
     done
     interesting "Working in $cwd"
+}
+
+
+govirtual () {
+    info "Switching to local Python virtual environment ..."
+    source $ENV_ROOT/bin/activate
 }
