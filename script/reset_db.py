@@ -11,6 +11,7 @@ import json
 import psycopg2 as pg
 import os
 import sys
+from pprint import pprint
 
 # put API module in path
 real_path = os.path.dirname(__file__)
@@ -52,32 +53,20 @@ def drop(cur):
 def create(cur):
     cur.execute(sql_create)
 
-def sanitize(v, esc=True):
-    if type(v) is list:
-        v = json.dumps([sanitize(a, False) for a in v])
-        v = v.replace('[', '{').replace(']', '}')
-        v = "'%s'" % v
-    elif type(v) is str:
-        v = "'%s'" % v if esc else v
-    elif type(v) is unicode:
-        v = u'"' + v + '"' if esc else v
-    elif v is None:
-        v = 'null'
-    else:
-        v = unicode(v)
-    return v
-
 def insert(cur, d):
-    keys = []
-    values = ''
-    for k, v in d.items():
-        keys.append(k)
-        values += ',' if len(values) else ''
-        values += sanitize(v)
-    sql = sql_insert % (
+    keys = d.keys()
+    vals = d.values()
+
+    base_sql = "INSERT INTO %s (%s) VALUES (%s)" % (
+        db_name,
         ','.join(keys),
-        values
+        ','.join(['%s'] * len(vals))
     )
+
+    print >>sys.stderr, pprint(d)
+
+    sql = cur.mogrify(base_sql, vals)
+
     cur.execute(sql)
 
 

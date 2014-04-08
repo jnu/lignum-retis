@@ -44,12 +44,13 @@ def read_complex_number_line(text, lim=None):
 
 def read_comma_number_line(text, lim=None):
     text = text or ''
+    blank = [None] * lim if lim is not None else []
     if text.startswith('No data'):
-        return [None] * lim if lim is not None else []
+        return blank
     try:
         l = [clean_number(n) for n in text.split(',')]
     except ValueError:
-        l = text
+        l = blank
     while len(l) < lim: l.append(None)
     return l
 
