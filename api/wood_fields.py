@@ -5,7 +5,9 @@ Fields in the table
 Copyright 2014 Joe Nudell
 '''
 
-db_name = 'wood'
+db_user = 'lignum'
+
+table_name = 'wood'
 
 LIST_DELIM = '|'
 

@@ -9,6 +9,7 @@ PG_USER="lignum"
 PG_PASS="password"
 DATA_DIR="raw"
 ENV_ROOT="env"
+ENV=${1:-local}
 
 # get script directory
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -95,9 +96,12 @@ else
     python script/reset_db.py "$PG_USER" "$FULL_FILE_PATH"
 fi
 
-# clean up
+# quit postgres
 info "Stopping Postgres ..."
 kill $PG_PID
+
+info "Writing NginX config ..."
+sudo python script/configure.py "$ENV"
 
 info "Exiting Python virtual environment ..."
 deactivate

@@ -7,7 +7,7 @@ $ python reset_db.py <pg_user> <records.json>
 Copyright 2014 Joe Nudell
 '''
 
-import json
+import ujson as json
 import psycopg2 as pg
 import os
 import sys
@@ -19,7 +19,7 @@ api_rel = '../api'
 api_full_path = os.path.join(real_path, api_rel)
 sys.path.append(api_full_path)
 
-from wood_fields import db_name, fields, LIST_DELIM
+from wood_fields import table_name, fields, LIST_DELIM
 
 
 
@@ -31,7 +31,7 @@ CREATE TABLE %s
     %s
 );
 ''' % (
-    db_name,
+    table_name,
     ','.join([
         '%s %s' % (k, v) for k, v in fields.items()
     ])
@@ -40,12 +40,12 @@ CREATE TABLE %s
 # SQL for dropping
 sql_drop = '''
 DROP TABLE IF EXISTS %s
-''' % db_name
+''' % table_name
 
 sql_insert = '''
 INSERT INTO %s (%%s)
 VALUES (%%s)
-''' % db_name
+''' % table_name
 
 def drop(cur):
     cur.execute(sql_drop)
@@ -58,7 +58,7 @@ def insert(cur, d):
     vals = d.values()
 
     base_sql = "INSERT INTO %s (%s) VALUES (%s)" % (
-        db_name,
+        table_name,
         ','.join(keys),
         ','.join(['%s'] * len(vals))
     )
