@@ -1,3 +1,8 @@
+# Some utility functions
+
+ROOT="lignum-retis"
+
+
 # Colorize bash output
 #
 # Modified from http://www.tldp.org/LDP/abs/html/colorizing.html
@@ -8,6 +13,7 @@
 #
 # Provides logging functions: info, interesting, good, warn, and error,
 # which call cecho with predetermined colors
+
 
 # ----------- Colors ------------ #
 
@@ -66,4 +72,25 @@ good () {
 interesting () {
     cecho "$1" $clr_interesting
     return
+}
+
+
+# ------ HELPERS ------- #
+
+findroot () {
+    info "Navigating to root ..."
+    # go up directory tree until root is found
+    cwd=${PWD##*/}
+    LAST=
+    while [[ "$ROOT" -ne "$cwd" ]]; do
+        LAST=$cwd
+        cd ..
+        cwd=${PWD##*/}
+
+        if [[ "$LAST" -eq "$cwd" ]]; then
+            error "Can't find root. Try running from root or script directory."
+            exit 1
+        fi
+    done
+    interesting "Working in $cwd"
 }

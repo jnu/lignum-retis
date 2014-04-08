@@ -15,7 +15,7 @@ from pprint import pprint
 
 # put API module in path
 real_path = os.path.dirname(__file__)
-api_rel = '../api'
+api_rel = '../server'
 api_full_path = os.path.join(real_path, api_rel)
 sys.path.append(api_full_path)
 

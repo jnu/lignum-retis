@@ -4,7 +4,6 @@
 #
 # Copyright 2014 Joe Nudell. All rights reserved.
 
-ROOT="lignum-retis"
 PG_USER="lignum"
 PG_PASS="password"
 DATA_DIR="raw"
@@ -14,23 +13,10 @@ ENV=${1:-local}
 # get script directory
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-# include logging helpers
-source "$DIR/log.sh"
+# include helpers
+source "$DIR/common.sh"
 
-info "Navigating to root ..."
-# go up directory tree until root is found
-cwd=${PWD##*/}
-LAST=
-while [[ "$ROOT" -ne "$cwd" ]]; do
-    LAST=$cwd
-    cd ..
-    cwd=${PWD##*/}
-
-    if [[ "$LAST" -eq "$cwd" ]]; then
-        error "Can't find root. Try running from root or script directory."
-        exit 1
-    fi
-done
+findroot
 
 info "Checking core dependencies ..."
 command -v postgres >/dev/null 2>&1 || brew install postgres

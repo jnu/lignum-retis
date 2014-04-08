@@ -6,13 +6,16 @@ Copyright 2014 Joe Nudell
 '''
 
 from sys import argv, stderr
-from subprocess import call
 import os
 
 real_path = os.path.dirname(__file__)
 conf_rel = '../conf'
 conf_full_path = os.path.join(real_path, conf_rel)
 name = 'lignum'
+
+script_dir = os.path.dirname(os.path.abspath(__file__))
+rel_root = os.path.join(script_dir, '..')
+abs_root = os.path.abspath(rel_root)
 
 
 # Define environments here
@@ -21,7 +24,7 @@ config = {
         'nginx': {
             'port': 5000,
             'name': '_',
-            'root': os.path.join(real_path, '..'),
+            'root': abs_root,
         },
         'conf_dir': '/usr/local/etc/nginx/sites-available'
     }
@@ -55,7 +58,8 @@ if __name__ == '__main__':
 
     print >>stderr, "Activating config ...",
     active_path = conf_path.replace('sites-available', 'sites-enabled')
-    call('sudo ln -s %s %s' % (conf_path, active_path))
+    os.system('sudo rm -f %s' % active_path)
+    os.system('sudo ln -s %s %s' % (conf_path, active_path))
     print >>stderr, "Done!"
 
 
