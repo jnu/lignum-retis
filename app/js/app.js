@@ -8,7 +8,7 @@
 
 define([
     'react',
-    'jsx!Main/MainView'
+    'Main/MainView'
 ],
 function(React, MainView) {
 

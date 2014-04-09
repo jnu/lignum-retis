@@ -6,12 +6,9 @@
 
 require.config({
 
-    baseUrl: '/js/modules',
+    baseUrl: '/assets/js/modules',
 
     paths: {
-        JSXTransformer : '../lib/JSXTransformer',
-        jsx            : '../lib/require-jsx',
-        text           : '../lib/require-text',
         zepto          : '../lib/zepto',
         react          : '../lib/react',
         underscore     : '../lib/underscore',
@@ -20,9 +17,6 @@ require.config({
     },
 
     shim: {
-        JSXTransformer: {
-            exports: 'JSXTransformer'
-        },
 
         d3: {
             exports: 'd3'
@@ -51,7 +45,7 @@ require.config({
 // start app
 require([
     'zepto',
-    'jsx!../app'
+    '../app'
 ],
 function(
     Zepto,

@@ -1,7 +1,14 @@
 .DS_Store
+
+.sass-cache/
+
 node_modules/
 data/
 public/
+
+# ignore built and dist versions
+build/
+dist/
 
 # compiled / optimized python
 __pycache__/
@@ -11,4 +18,3 @@ __pycache__/
 
 # virtual env
 env/
-

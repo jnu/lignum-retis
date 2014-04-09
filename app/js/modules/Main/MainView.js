@@ -13,7 +13,7 @@ function(React) {
 
     var MainView = React.createClass({
         render: function() {
-            return <div>Hello! React works, apparently.</div>
+            return <div>Hello! React works well, apparently!</div>
         }
     });
 

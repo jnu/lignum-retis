@@ -12,12 +12,16 @@ server {
     listen %(port)d;
     server_name %(name)s;
 
-    root %(root)s;
     index index.html;
     rewrite  ^/(\?.*)?$  /index.html$1  permanent;
 
     location / {
+        root %(root)s;
         try_files $uri @py_proxy;
+    }
+
+    location ~ ^/assets/(.*)$ {
+        alias %(assetsRoot)s/$1;
     }
 
     location @py_proxy {

@@ -12,6 +12,7 @@ __abs_root = os.path.abspath(__rel_root)
 
 # these might be useful ...
 app_root = os.path.join(__abs_root, 'app')
+assets_root = os.path.join(__abs_root, 'build')
 
 name = 'lignum'
 
@@ -22,6 +23,7 @@ config = {
             'port': 5000,
             'name': '_',
             'root': app_root,
+            'assetsRoot': assets_root
         },
         'conf_dir': '/usr/local/etc/nginx/sites-available'
     }
