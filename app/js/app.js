@@ -2,18 +2,23 @@
  * Main app entry point
  *
  * Copyright 2014 Joe Nudell
+ *
+ * @jsx React.DOM
  */
 
 define([
-    'Main/MainView'
+    'react',
+    'jsx!Main/MainView'
 ],
-function(MainView) {
+function(React, MainView) {
 
     var App = {
         start: function() {
-            var main = new MainView();
-            console.log("App started")
-            main.render();
+            console.log("App started");
+            React.renderComponent(
+                <MainView />,
+                document.getElementById('container')
+            );
         }
     };
 

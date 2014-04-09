@@ -2,49 +2,20 @@
  * Main view
  *
  * Copyright 2014 Joe Nudell
+ *
+ * @jsx React.DOM
  */
 
 define([
-    'zepto'
+    'react'
 ],
-function($) {
+function(React) {
 
-    var MainView = function() {};
-
-    MainView.prototype = {
+    var MainView = React.createClass({
         render: function() {
-            this.fetch($('#data'));
-        },
-
-        fetch: function($el) {
-            $.get('/api', function(obj) {
-                var keys = Object.keys(obj.woods[0]);
-
-                var h = "<table>";
-                h += "<thead>";
-                h += "<tr>";
-                h += keys.map(function(key) {
-                    return "<th>" + key + "</th>";
-                });
-                h += "</tr>";
-                h += "</thead>";
-                h += "<tbody>";
-
-                obj.woods.forEach(function(wood) {
-                    h += "<tr>";
-                    h += keys.map(function(key) {
-                        return "<td>" + wood[key] + "</td>";
-                    });
-                    h += "</tr>";
-                });
-
-                h += "</body>";
-                h += "</table>";
-
-                $el.html(h);
-            });
+            return <div>Hello! React works, apparently.</div>
         }
-    }
+    });
 
     return MainView;
 });
