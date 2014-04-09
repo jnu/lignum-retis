@@ -18,7 +18,7 @@ from config import config, name
 
 if __name__ == '__main__':
 
-    conf_template_fn = os.path.join(conf_full_path, 'template.conf')
+    conf_template_fn = os.path.join(conf_full_path, 'nginx-site.conf.tpl')
 
     with open(conf_template_fn) as fh:
         template = fh.read()
