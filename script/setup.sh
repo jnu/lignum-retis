@@ -26,6 +26,8 @@ command -v ./$ENV_ROOT/bin/python2.7 >/dev/null 2>&1 || virtualenv $ENV_ROOT
 
 # install JS dependencies
 info "Checking JS dependencies ..."
+sudo npm install -g grunt-cli@0.1.13
+sudo npm install -g react-tools@0.10.0
 sudo npm install
 
 # install python dependencies (in virtual environment)
