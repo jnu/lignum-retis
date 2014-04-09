@@ -26,8 +26,7 @@ command -v ./$ENV_ROOT/bin/python2.7 >/dev/null 2>&1 || virtualenv $ENV_ROOT
 
 # install JS dependencies
 info "Checking JS dependencies ..."
-sudo npm install -g grunt grunt-cli nodemon
-sudo npm install
+npm install
 
 # install python dependencies (in virtual environment)
 govirtual
