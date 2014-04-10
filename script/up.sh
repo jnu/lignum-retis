@@ -36,7 +36,7 @@ done
 
 # build stuff
 info "Building crap ..."
-grunt sass
+grunt build
 
 # launch nginx
 sudo nginx -s stop
