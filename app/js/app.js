@@ -14,7 +14,6 @@ function(React, MainView) {
 
     var App = {
         start: function() {
-            console.log("App started");
             React.renderComponent(
                 <MainView />,
                 document.getElementById('container')

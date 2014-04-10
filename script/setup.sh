@@ -23,6 +23,8 @@ command -v postgres >/dev/null 2>&1 || brew install postgres
 command -v virtualenv >/dev/null 2>&1 || sudo easy_install virtualenv
 command -v ./$ENV_ROOT/bin/python2.7 >/dev/null 2>&1 || virtualenv $ENV_ROOT
 
+# install Ruby dependencies (blah)
+gem install sass || sudo gem install sass
 
 # install JS dependencies
 info "Checking JS dependencies ..."
