@@ -8,17 +8,24 @@
 
 define([
     'react',
-    'Main/MainView'
+    'MainView',
 ],
-function(React, MainView) {
+function(
+    React,
+    MainView
+) {
 
     var App = {
+
         start: function() {
+            var app = this;
+
             React.renderComponent(
                 <MainView />,
                 document.getElementById('container')
             );
         }
+
     };
 
     return App;

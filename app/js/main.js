@@ -9,10 +9,13 @@ require.config({
     baseUrl: '/assets/js/modules',
 
     paths: {
-        zepto          : '../lib/zepto',
-        react          : '../lib/react',
-        underscore     : '../lib/underscore',
+        config         : '../config',
+        app            : '../app',
         d3             : '../lib/d3',
+        react          : '../lib/react',
+        jquery         : '../lib/jquery',
+        underscore     : '../lib/underscore',
+        backbone       : '../lib/backbone',
         crossfilter    : '../lib/crossfilter'
     },
 
@@ -26,12 +29,16 @@ require.config({
             exports: 'React'
         },
 
-        zepto: {
-            exports: 'Zepto'
+        jquery: {
+            exports: 'jquery'
         },
 
         underscore: {
             exports: '_'
+        },
+
+        backbone: {
+            exports: 'Backbone'
         },
 
         crossfilter : {
@@ -44,11 +51,13 @@ require.config({
 
 // start app
 require([
-    'zepto',
-    '../app'
+    'jquery',
+    'underscore',
+    'app'
 ],
 function(
-    Zepto,
+    $,
+    _,
     app
 ) {
 

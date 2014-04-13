@@ -25,7 +25,9 @@ module.exports = function(grunt) {
         // },
 
         clean: {
-            build: ['build/']
+            build: ['build/'],
+            js: ['build/js'],
+            css: ['build/css']
         },
 
         copy: {
@@ -46,9 +48,10 @@ module.exports = function(grunt) {
         },
 
         watch: {
+
             js: {
                 files: ['**/*.js', '!build/**/*.js', '!node_modules/**/*.js'],
-                tasks: ['shell:jsx', 'copy:build'],
+                tasks: ['clean:js', 'shell:jsx', 'copy:build'],
                 options: {
                     interrupt: true
                 }
@@ -56,7 +59,7 @@ module.exports = function(grunt) {
 
             sass: {
                 files: '**/*.scss',
-                tasks: ['sass']
+                tasks: ['clean:css', 'sass']
             }
         },
 
