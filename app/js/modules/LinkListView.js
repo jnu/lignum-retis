@@ -31,7 +31,7 @@ function(
             });
 
             return (
-                <div>
+                <div className="link-list">
                     { links }
                 </div>
             );

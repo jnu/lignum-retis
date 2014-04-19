@@ -8,9 +8,11 @@ define({
 
     API_ROOT: '/api/wood/',
 
+    SHOW_TREE_ROOT: '/tree/',
+
     // helpers
     woodUrl: function(id) {
-        return this.API_ROOT + (id || '');
+        return this.SHOW_TREE_ROOT + (id || '');
     }
 
 });

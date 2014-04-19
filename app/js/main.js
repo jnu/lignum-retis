@@ -53,11 +53,13 @@ require.config({
 require([
     'jquery',
     'underscore',
+    'plugins/jquery-extra',
     'app'
 ],
 function(
     $,
     _,
+    $xtra,
     app
 ) {
 

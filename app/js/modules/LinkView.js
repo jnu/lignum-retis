@@ -21,7 +21,7 @@ function(
 
         render: function() {
             return (
-                <div>
+                <div className="link-list-item">
                     <a href={ this.props.url }>
                         <span>{ this.formatName(this.props.children) }</span>
                     </a>

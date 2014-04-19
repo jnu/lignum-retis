@@ -13,11 +13,15 @@ server {
     server_name %(name)s;
 
     index index.html;
-    rewrite  ^/(\?.*)?$  /index.html$1  permanent;
+    #rewrite  ^/tree(\/.*)?(\?.*)?$  /$2  permanent;
 
     location / {
         root %(root)s;
-        try_files $uri @py_proxy;
+        try_files $uri $uri/ /index.html;
+    }
+
+    location /api/ {
+        try_files $uri $uri/ @py_proxy;
     }
 
     location ~ ^/assets/(.*)$ {
