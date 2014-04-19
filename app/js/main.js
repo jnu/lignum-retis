@@ -54,12 +54,14 @@ require([
     'jquery',
     'underscore',
     'plugins/jquery-extra',
+    'plugins/underscore-mixins',
     'app'
 ],
 function(
     $,
     _,
     $xtra,
+    _x,
     app
 ) {
 

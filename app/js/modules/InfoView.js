@@ -7,17 +7,19 @@
  */
 
 define([
-    'react'
+    'react',
+    'DetailsGridView'
 ],
 function(
-    React
+    React,
+    DetailsGridView
 ) {
 
     var InfoView = React.createClass({
 
         getInitialState: function() {
             return {
-                name: "",
+                name: [],
                 type: ""
             };
         },
@@ -26,15 +28,40 @@ function(
             this.setState(m.toJSON());
         },
 
+        _parseTreeName: function(name) {
+            var primary = name.shift();
+            var secondary = name.join(', ');
+
+            return {
+                primary: primary,
+                secondary: secondary
+            };
+        },
+
+        getTitle: function() {
+            return this._parseTreeName(this.state.name);
+        },
+
+        getTableContent: function() {
+            return _.pick(this.state, [
+                'type',
+                'dryWeight',
+                'height',
+                'diameter'
+            ]);
+        },
+
         render: function() {
+            var title = this.getTitle();
+
             return (
                 <div>
                     <section className="header">
-                        <h3>Info</h3>
+                        <h3>{ title.primary }</h3>
+                        <div>Other names: <span className="title.secondary-">{ title.secondary }</span></div>
                     </section>
                     <section className="body">
-                        <h3>{ this.state.name }</h3>
-                        <p>{ this.state.type }</p>
+                        <DetailsGridView content={ this.getTableContent() } />
                     </section>
                 </div>
             );

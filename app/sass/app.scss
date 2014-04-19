@@ -4,10 +4,7 @@
 
 @import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic&subset=latin,latin-ext);
 
-*, *::before, *::after {
-    box-sizing: border-box;
-}
-
+// palette
 $white: #F7F7F0;
 $red: rgb(255, 77, 66);
 $accent: darken($red, 10%);
@@ -17,50 +14,9 @@ $gold: #FFC000;
 $black: #333333;
 $tan: #FFE499;
 
-body {
-    font-family: Source Sans Pro, Arial, sans-serif;
-    background-color: $white;
-    margin: 0;
-    padding: 0;
-    color: $black;
-}
+// sizes
+$radius: 5px;
 
-a {
-    color: lighten($black, 5%);
-    text-decoration: none;
-    font-weight: bold;
-}
-
-header {
-    color: darken($red, 25%);
-}
-
-article.page {
-    background-color: $tan;
-    width: 100%;
-    margin: 100px auto;
-    max-width: 1000px;
-
-    section {
-        &.header {
-            width: 100%;
-            background-color: $brown;
-            border-bottom: 5px solid $accent;
-            padding: 2px 10px;
-
-            h3 {
-                color: $gold;
-                font-size: 32px;
-                letter-spacing: .1em;
-            }
-        }
-
-        &.body {
-            padding: 60px 40px;
-        }
-    }
-}
-
-.link-list-item {
-    display: inline-block;
-}
+// app styles
+@import "main";
+@import "tree";

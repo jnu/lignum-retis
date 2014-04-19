@@ -15,7 +15,7 @@ function(
 
     var LinkView = React.createClass({
 
-        formatName: function(name) {
+        _formatName: function(name) {
             return name && name.join(', ').replace(/, (.*)$/, ' ($1)')
         },
 
@@ -23,7 +23,7 @@ function(
             return (
                 <div className="link-list-item">
                     <a href={ this.props.url }>
-                        <span>{ this.formatName(this.props.children) }</span>
+                        <span>{ this._formatName(this.props.children) }</span>
                     </a>
                 </div>
             )

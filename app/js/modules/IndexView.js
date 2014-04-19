@@ -10,12 +10,14 @@ define([
     'config',
     'react',
     'LinkListView',
+    'vis/tree/TreeVisView',
     'resources/TreeCollection'
 ],
 function(
     cfg,
     React,
     LinkListView,
+    TreeVisView,
     TreeCollection
 ) {
 
@@ -86,7 +88,7 @@ function(
                         <h3>Trees</h3>
                     </section>
                     <section className="body">
-                        <LinkListView links={ this.state.trees } />
+                        <TreeVisView nodes={ this.state.trees } />
                     </section>
                 </div>
             )

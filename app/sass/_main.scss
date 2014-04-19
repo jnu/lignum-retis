@@ -1,0 +1,57 @@
+// Main styles
+//
+// Copyright 2014 Joe Nudell
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Source Sans Pro, Arial, sans-serif;
+    background-color: $black;
+    margin: 0;
+    padding: 0;
+    color: $black;
+}
+
+a {
+    color: lighten($black, 5%);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+header {
+    color: darken($red, 25%);
+}
+
+article.page {
+    background-color: $tan;
+    width: 100%;
+    margin: 100px auto;
+    max-width: 1000px;
+    border-radius: $radius;
+
+    section {
+        &.header {
+            width: 100%;
+            background-color: $brown;
+            border-bottom: 5px solid $accent;
+            padding: 2px 10px;
+            border-radius: $radius $radius 0 0;
+
+            h3 {
+                color: $gold;
+                font-size: 32px;
+                letter-spacing: .1em;
+            }
+        }
+
+        &.body {
+            padding: 60px 40px;
+        }
+    }
+}
+
+.link-list-item {
+    display: inline-block;
+}

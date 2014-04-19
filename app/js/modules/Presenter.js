@@ -9,12 +9,14 @@
 define([
     'react',
     'IndexView',
-    'InfoView'
+    'InfoView',
+    'VisView'
 ],
 function(
     React,
     IndexView,
-    InfoView
+    InfoView,
+    VisView
 ) {
     function Presenter() {
         /* empty constructor */
@@ -26,6 +28,8 @@ function(
 
         _infoView: null,
 
+        _visView: null,
+
         init: function() {
             this._indexView = React.renderComponent(
                 <IndexView />,
@@ -35,6 +39,11 @@ function(
             this._infoView = React.renderComponent(
                 <InfoView />,
                 document.getElementById('info')
+            );
+
+            this._visView = React.renderComponent(
+                <VisView />,
+                document.getElementById('vis')
             );
         },
 

@@ -1,3 +1,9 @@
+/**
+ * jQuery plugins
+ *
+ * Copyright 2014 Joe Nudell
+ */
+
 define(['jquery'],
 function($) {
 
