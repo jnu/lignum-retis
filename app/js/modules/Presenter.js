@@ -6,18 +6,12 @@
  * @jsx React.DOM
  */
 
-define([
-    'react',
-    'IndexView',
-    'InfoView',
-    'VisView'
-],
-function(
-    React,
-    IndexView,
-    InfoView,
-    VisView
-) {
+define(function(require) {
+    var React = require('react');
+    var IndexView = require('IndexView');
+    var InfoView = require('InfoView');
+    var VisView = require('VisView');
+
     function Presenter() {
         /* empty constructor */
     };

@@ -4,10 +4,8 @@
  * Copyright 2014 Joe Nudell. All rights reserved.
  */
 
-define(['backbone'],
-function(
-    Backbone
-) {
+define(function(require) {
+    var Backbone = require('backbone');
 
     var Router = Backbone.Router.extend({
 

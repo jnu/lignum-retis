@@ -4,16 +4,11 @@
  * Copyright 2014 Joe Nudell
  */
 
-define([
-    'plugins/backbone-hijack-links',
-    'Presenter',
-    'router/router'
-],
-function(
-    HijackLinks,
-    Presenter,
-    Router
-) {
+define(function(require) {
+
+    var HijackLinks = require('plugins/backbone-hijack-links');
+    var Presenter = require('Presenter');
+    var Router = require('router/router');
 
     var App = {
 

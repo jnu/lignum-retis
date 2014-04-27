@@ -4,12 +4,8 @@
  * Copyright 2014 Joe Nudell
  */
 
-define([
-    'd3'
-],
-function(
-    d3
-) {
+define(function(require) {
+    var d3 = require('d3');
 
     // fast log2 function
     function log2(n) {
@@ -200,13 +196,16 @@ function(
          * @return {Object}          New branch
          */
         _makeBranch: function(b, right) {
+            var depth = b.d + 1;
+            var angle = this._computeAngle(b.a, depth, this._wiggle(right));
+
             var newBranch = {
                 i: this._branches.length,
                 x: b.x2,
                 y: b.y2,
                 x2: null,
                 y2: null,
-                a: b.a + this._wiggle(right),
+                a: angle,
                 l: b.l * this._lengthDelta,
                 w: b.w - 1,
                 d: b.d + 1,
@@ -219,6 +218,21 @@ function(
             newBranch.y2 = newEnd.y;
 
             return newBranch;
+        },
+
+        /**
+         * Compute an angle for a branch given an initial angle, a depth, and
+         * a bit of randomness. Less deep branches should hug the closer to the
+         * center
+         * @param  {Number} initialAngle The angle of the previous branch
+         * @param  {Number} depth        Depth of the branch
+         * @param  {Number} wiggle       A little random number, computed with
+         *                               TreeVis#_wiggle
+         * @return {Number}              New angle
+         */
+        _computeAngle: function(initialAngle, depth, wiggle) {
+            var compact = depth / this._maxDepth;
+            return compact * (initialAngle + wiggle);
         },
 
         /**
@@ -250,7 +264,6 @@ function(
 
         /**
          * Prune the tree branches to the correct length
-         * @return {[type]} [description]
          */
         _prune: function() {
             var dataCount = this._data.length;

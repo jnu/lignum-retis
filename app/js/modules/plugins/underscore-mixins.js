@@ -4,12 +4,9 @@
  * Copyright 2014 Joe Nudell
  */
 
-define([
-    'underscore'
-],
-function(
-    _
-) {
+define(function(require) {
+    var _ = require('underscore');
+
     _.mixin({
 
         /**

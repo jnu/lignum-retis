@@ -4,9 +4,10 @@
  * Copyright 2014 Joe Nudell
  */
 
-define(['jquery'],
-function($) {
+define(function(require) {
+    var $ = require('jquery');
 
+    // cache body selection
     var $body = $('body');
 
     /**

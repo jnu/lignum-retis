@@ -6,14 +6,9 @@
  * @jsx React.DOM
  */
 
-define([
-    'react',
-    'vis/tree/TreeVis'
-],
-function(
-    React,
-    TreeVis
-) {
+define(function(requre) {
+    var React = require('react');
+    var TreeVis = require('vis/tree/TreeVis');
 
     var TreeVisView = React.createClass({
 

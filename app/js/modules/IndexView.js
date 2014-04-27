@@ -6,20 +6,12 @@
  * @jsx React.DOM
  */
 
-define([
-    'config',
-    'react',
-    'LinkListView',
-    'vis/tree/TreeVisView',
-    'resources/TreeCollection'
-],
-function(
-    cfg,
-    React,
-    LinkListView,
-    TreeVisView,
-    TreeCollection
-) {
+define(function(require) {
+    var cfg = require('config');
+    var React = require('react');
+    var LinkListView = require('LinkListView');
+    var TreeVisView = require('vis/tree/TreeVisView');
+    var TreeCollection = require('resources/TreeCollection');
 
     var IndexView = React.createClass({
 

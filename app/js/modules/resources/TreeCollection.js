@@ -4,14 +4,9 @@
  * Copyright 2014 Joe Nudell
  */
 
-define([
-    'config',
-    'backbone'
-],
-function(
-    cfg,
-    Backbone
-) {
+define(function(require) {
+    var cfg = require('config');
+    var Backbone = require('backbone');
 
     var TreesCollection = Backbone.Collection.extend({
 

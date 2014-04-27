@@ -5,8 +5,11 @@
  * Copyright 2014 Joe Nudell. Freely distributable under MIT License.
  */
 
-define(['jquery', 'backbone'], function($, Backbone) {
-    return function(clientRoot) {
+define(function(require) {
+    var $ = require('jquery');
+    var Backbone = require('backbone');
+
+    return function BackboneLinkHijacker(clientRoot) {
         if (Backbone.history && Backbone.history._hasPushState) {
             $(document).delegate("a", "click", function(evt) {
                 // Get the anchor href and protcol

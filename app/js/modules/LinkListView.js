@@ -6,16 +6,10 @@
  * @jsx React.DOM
  */
 
-define([
-    'config',
-    'react',
-    'LinkView'
-],
-function(
-    cfg,
-    React,
-    LinkView
-) {
+define(function(require) {
+    var cfg = require('config');
+    var React = require('react');
+    var LinkView = require('LinkView');
 
     var LinkListView = React.createClass({
 

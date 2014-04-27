@@ -6,14 +6,9 @@
  * @jsx React.DOM
  */
 
-define([
-    'react',
-    'DetailsGridView'
-],
-function(
-    React,
-    DetailsGridView
-) {
+define(function(require) {
+    var React = require('react');
+    var DetailsGridView = require('DetailsGridView');
 
     var InfoView = React.createClass({
 
