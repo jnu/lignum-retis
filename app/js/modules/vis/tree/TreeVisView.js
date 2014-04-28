@@ -7,7 +7,9 @@
  */
 
 define(function(requre) {
+    var cfg = require('config');
     var React = require('react');
+    var Backbone = require('backbone');
     var TreeVis = require('vis/tree/TreeVis');
 
     var TreeVisView = React.createClass({
@@ -16,6 +18,7 @@ define(function(requre) {
 
         getDefaultProps: function() {
             this._treeVis = new TreeVis(this.props.nodes);
+
             return {
                 nodes: []
             };
@@ -27,7 +30,16 @@ define(function(requre) {
             }
         },
 
+        bindEvents: function() {
+            var v = this._treeVis;
+            v.on(v.EVT_REQUEST_TREE, function(id) {
+                var href = cfg.woodUrl(id);
+                Backbone.history.navigate(href, true);
+            });
+        },
+
         componentDidUpdate: function() {
+            this.bindEvents();
             var node = this.getDOMNode();
             var tree = this._treeVis;
             tree.render(node);

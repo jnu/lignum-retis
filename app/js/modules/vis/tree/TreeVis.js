@@ -6,12 +6,32 @@
 
 define(function(require) {
     var d3 = require('d3');
+    var Backbone = require('backbone');
 
     // fast log2 function
     function log2(n) {
         for (var i = 0; n >>= 1; i++);
         return i;
     }
+
+    // SVG path to draw a cute li'l tree leaf
+    var PATH_LEAF = "" +
+    "m5.50942,40.30404c1.14479,-3.74831 2.71167,-6.92277 4.19798,-8.50487" +
+    "c1.59233,-1.69497 0.88586,-2.43016 -0.75676,-0.78754" +
+    "c-0.69108,0.69106 -0.88852,0.18926 -0.88852,-2.25806" +
+    "c0,-5.83918 3.02691,-9.45228 10.30981,-12.30641" +
+    "c6.16241,-2.41505 10.70569,-5.1309 12.58942,-7.5257" +
+    "l1.53503,-1.95145" +
+    "l0,3.39535c0,4.19841 -1.30256,10.54117 -2.74437,13.36364" +
+    "c-1.5295,2.99415 -6.77205,8.52091 -9.34466,9.85125" +
+    "c-2.57261,1.33033 -7.22719,1.54277 -9.85796,0.70269" +
+    "c-1.31102,-0.41859 -1.7271,-0.09875 -2.4064,1.84988" +
+    "c-0.45172,1.29583 -0.82132,3.13928 -0.82132,4.09661" +
+    "c0,1.08684 -0.43588,1.74057 -1.16053,1.74057" +
+    "c-0.86067,0 -1.02907,-0.43046 -0.65174,-1.66597" +
+    "z";
+
+    var EVT_REQUEST_TREE = 'CANIHAZTREE';
 
     /**
      * Tree visualization class
@@ -32,6 +52,11 @@ define(function(require) {
          * @type {Object[]}
          */
         this._branches = [];
+
+        /**
+         * @type {Object[]}
+         */
+        this._leaves = [];
 
         /**
          * @type {Number}
@@ -56,7 +81,7 @@ define(function(require) {
         /**
          * @type {Number}
          */
-        this._angleDelta = 0.5;
+        this._divergence = 0.5;
 
         /**
          * @type {Number}
@@ -85,41 +110,59 @@ define(function(require) {
         this.setData(nodes || []);
     }
 
-    TreeVis.prototype = {
+    _.extend(TreeVis.prototype, Backbone.Events, {
+
+        // -- constants ---------------------------------------------
+
+        /**
+         * Path for a tree leaf
+         * @type {String}
+         */
+        PATH_LEAF: PATH_LEAF,
+
+        LEAF_ID: 'leaf',
+
+        EVT_REQUEST_TREE: EVT_REQUEST_TREE,
 
         // -- public methods ----------------------------------------
 
         /**
-         * Generate the branches for the current data
+         * Generate the branches for the current data.
          */
         generate: function() {
-            if (!this._ready) {
-                this._branches = [];
-                var seed = this._seed();
-                this._branch(seed);
-                this._prune();
-                this._ready = true;
-            }
+            // clear generated objects
+            this._branches = [];
+            this._leaves = [];
+
+            // create a seed branch (trunk)
+            var seed = this._seed();
+
+            // generate branches
+            this._branch(seed);
+
+            // generate leaves
+            this._leaf();
         },
 
         /**
          * Render the tree into the given SVG
          * @param {SVGElement} svg
          */
-        render: function(svg) {
+        render: function(svg, force) {
             var tree = this;
 
-            tree.generate();
-
+            var node = svg;
             svg = tree._selection = d3.select(svg);
-            var lines = svg.selectAll('line').data(tree._branches);
 
-            lines.enter().append('line')
-                .attr('x1', _.get('x'))
-                .attr('y1', _.get('y'))
-                .attr('x2', _.get('x2'))
-                .attr('y2', _.get('y2'))
-                .style('stroke-width', _.get('w'));
+            if (!force || !tree._ready) {
+                tree._clearSvg(svg);
+                tree._setupSvg(svg);
+                tree.generate();
+                tree._ready = true;
+            }
+
+            tree._renderBranches(svg);
+            tree._renderLeaves(svg);
         },
 
         /**
@@ -128,12 +171,40 @@ define(function(require) {
          */
         setData: function(nodes) {
             this._data = nodes;
-            this._maxDepth = log2(nodes.length) + 1;
+            this._maxDepth = log2(nodes.length) - 1;
             this._ready = false;
         },
 
         // -- private methods ---------------------------------------
 
+        /**
+         * Prep the SVG for rendering. Add symbols and such.
+         * @param  {SVGElement} svg
+         */
+        _setupSvg: function(svg) {
+            var leafId = this.LEAF_ID;
+            var sym = svg.selectAll('symbol#' + leafId).data([0]);
+            sym.enter().append('symbol')
+                .attr('id', leafId);
+            var leaf = sym.selectAll('path').data([0]);
+            leaf.enter().append('path')
+                .attr('d', this.PATH_LEAF);
+        },
+
+        /**
+         * Clear the SVG
+         * @param {SVGElement} svg
+         */
+        _clearSvg: function(svg) {
+            var n;
+            while ((n = svg.firstChild)) {
+                svg.removeChild(n);
+            }
+        },
+
+        /**
+         * Bind methods that might be called out of context
+         */
         _bindMethods: function() {
             _.bindAll(this, '_branch');
         },
@@ -148,7 +219,7 @@ define(function(require) {
                 d: 0,
                 a: this._angle,
                 l: this._length,
-                w: this._maxDepth + 1,
+                w: this._maxDepth + 6,
                 x: this._width >> 1,
                 y: this._height,
                 x2: null,
@@ -179,14 +250,18 @@ define(function(require) {
         },
 
         /**
-         * Introduce some entropy into the branch angle
+         * Change the angle at the branch. Optionally with randomness.
          * @param  {Boolean}  right  Whether branch bends right or left
          * @return {Number}          Angle
          */
-        _wiggle: function(right) {
+        _angleDelta: function(right, random) {
+            var entropy = 0;
             var r = this._randomness;
-            var w = this._angleDelta + r * Math.random() - r * 0.5;
-            return right ? w : -w;
+            if (random) {
+                entropy = r * (Math.random() - 0.5);
+            }
+            var a = this._divergence + entropy;
+            return right ? a : -a;
         },
 
         /**
@@ -197,7 +272,7 @@ define(function(require) {
          */
         _makeBranch: function(b, right) {
             var depth = b.d + 1;
-            var angle = this._computeAngle(b.a, depth, this._wiggle(right));
+            var angle = this._computeAngle(b.a, right, depth);
 
             var newBranch = {
                 i: this._branches.length,
@@ -230,9 +305,10 @@ define(function(require) {
          *                               TreeVis#_wiggle
          * @return {Number}              New angle
          */
-        _computeAngle: function(initialAngle, depth, wiggle) {
-            var compact = depth / this._maxDepth;
-            return compact * (initialAngle + wiggle);
+        _computeAngle: function(initialAngle, right, depth) {
+            var compact = Math.max(4, depth) / this._maxDepth;
+            var delta = this._angleDelta(right);
+            return initialAngle + delta;
         },
 
         /**
@@ -262,46 +338,45 @@ define(function(require) {
             tree._branch(newBranch);
         },
 
+        _leaf: function() {
+            this._leaves = this._data.map(function(d) { return d; });
+        },
+
         /**
-         * Prune the tree branches to the correct length
+         * Render the contents of the instance's `branches` array
+         * @param  {D3Selection} svg D3-selected SVG
          */
-        _prune: function() {
-            var dataCount = this._data.length;
-            var lastRow = this._maxDepth;
-            var lastRowSize = Math.pow(2, lastRow);
-            var keep = lastRowSize - dataCount;
-            var allIds = new Array(lastRowSize);
-            var i = lastRowSize;
+        _renderBranches: function(svg) {
+            var lines = svg.selectAll('line').data(this._branches);
 
-            while (i--) {
-                allIds[i] = i;
-            }
+            lines.enter().append('line')
+                .attr('x1', _.get('x'))
+                .attr('y1', _.get('y'))
+                .attr('x2', _.get('x2'))
+                .attr('y2', _.get('y2'))
+                .style('stroke-width', _.get('w'));
+        },
 
-            // get a list of indexes of last row branches to keep
-            var keepIds = _.sample(allIds, keep).sort(function(a, b) {
-                return a - b;
-            });
+        /**
+         * Render the contents of the instance's `leaves` array
+         * @param  {D3Selection} svg D3-selected SVG
+         */
+        _renderLeaves: function(svg) {
+            var tree = this;
+            var leaves = svg.selectAll('use').data(tree._leaves);
+            var lid = '#' + tree.LEAF_ID;
 
-            // generate a list of real branches
-            var branches = this._branches;
-            var realBranches = [];
-            var x = 0;
-
-            branches.forEach(function(b, i) {
-                if (b.d === lastRow) {
-                    if (keepIds[0] === x++) {
-                        realBranches.push(b);
-                        keepIds.shift();
-                    }
-                } else {
-                    realBranches.push(b);
-                }
-            });
-
-            this._branches = realBranches;
+            leaves.enter().append('use')
+                .attr('xlink:href', lid)
+                .attr('x', function(d, i) { return Math.random() * 800; })
+                .attr('y', function(){ return Math.random() * 600; })
+                .on('click', function(d) {
+                    // trigger semantic event
+                    tree.trigger(EVT_REQUEST_TREE, d.id);
+                });
         }
 
-    };
+    });
 
     return TreeVis;
 });
