@@ -38,76 +38,78 @@ define(function(require) {
      * @param {Object[]}  [nodes]  Node array
      */
     function TreeVis(nodes) {
-        /**
-         * @type {Object[]}
-         */
-        this._data = [];
-
-        /**
-         * @type {Number}
-         */
-        this._maxDepth = 0;
+        var vis = this;
 
         /**
          * @type {Object[]}
          */
-        this._branches = [];
+        vis._data = [];
+
+        /**
+         * @type {Number}
+         */
+        vis._maxDepth = 0;
 
         /**
          * @type {Object[]}
          */
-        this._leaves = [];
+        vis._branches = [];
+
+        /**
+         * @type {Object[]}
+         */
+        vis._leaves = [];
 
         /**
          * @type {Number}
          */
-        this._width = 800;
+        vis._width = 800;
 
         /**
          * @type {Number}
          */
-        this._height = 600;
+        vis._height = 600;
 
         /**
          * @type {Number}
          */
-        this._angle = 0;
+        vis._angle = 0;
 
         /**
          * @type {Number}
          */
-        this._length = 130;
+        vis._length = 130;
 
         /**
          * @type {Number}
          */
-        this._divergence = 0.5;
+        vis._divergence = 0.5;
 
         /**
          * @type {Number}
          */
-        this._lengthDelta = 0.8;
+        vis._lengthDelta = 0.8;
 
         /**
          * @type {Number}
          */
-        this._randomness = 0.7;
+        vis._randomness = 0.7;
 
         /**
          * @type {D3Selection}
          */
-        this._selection = null;
+        vis._selection = null;
 
         /**
          * @type {Boolean}
          */
-        this._ready = false;
+        vis._ready = false;
 
         // prep
-        this._bindMethods();
+        vis._bindMethods();
 
         // init
-        this.setData(nodes || []);
+        vis.setData(nodes || []);
     }
 
     _.extend(TreeVis.prototype, Backbone.Events, {
