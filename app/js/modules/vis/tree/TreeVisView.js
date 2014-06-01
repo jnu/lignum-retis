@@ -25,7 +25,7 @@ define(function(requre) {
         },
 
         componentWillReceiveProps: function(nextProps) {
-            if (nextProps.nodes){
+            if (nextProps.nodes) {
                 this._treeVis.setData(nextProps.nodes);
             }
         },

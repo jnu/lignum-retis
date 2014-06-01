@@ -6,7 +6,9 @@
 
 define(function(require) {
     var d3 = require('d3');
-    var Backbone = require('backbone');
+    var BaseVis = require('vis/base/BaseVis');
+
+    var BaseVisProto = BaseVis.prototype;
 
     // fast log2 function
     function log2(n) {
@@ -35,84 +37,63 @@ define(function(require) {
 
     /**
      * Tree visualization class
+     * @extends {BaseVis}
      * @param {Object[]}  [nodes]  Node array
      */
     function TreeVis(nodes) {
-        var vis = this;
+        var tree = this;
+
+        // call super
+        BaseVis.call(tree);
+
+        /**
+         * @type {Number}
+         */
+        tree._maxDepth = 0;
 
         /**
          * @type {Object[]}
          */
-        vis._data = [];
-
-        /**
-         * @type {Number}
-         */
-        vis._maxDepth = 0;
+        tree._branches = [];
 
         /**
          * @type {Object[]}
          */
-        vis._branches = [];
-
-        /**
-         * @type {Object[]}
-         */
-        vis._leaves = [];
+        tree._leaves = [];
 
         /**
          * @type {Number}
          */
-        vis._width = 800;
+        tree._angle = 0;
 
         /**
          * @type {Number}
          */
-        vis._height = 600;
+        tree._length = 130;
 
         /**
          * @type {Number}
          */
-        vis._angle = 0;
+        tree._divergence = 0.5;
 
         /**
          * @type {Number}
          */
-        vis._length = 130;
+        tree._lengthDelta = 0.8;
 
         /**
          * @type {Number}
          */
-        vis._divergence = 0.5;
-
-        /**
-         * @type {Number}
-         */
-        vis._lengthDelta = 0.8;
-
-        /**
-         * @type {Number}
-         */
-        vis._randomness = 0.7;
-
-        /**
-         * @type {D3Selection}
-         */
-        vis._selection = null;
-
-        /**
-         * @type {Boolean}
-         */
-        vis._ready = false;
+        tree._randomness = 0.7;
 
         // prep
-        vis._bindMethods();
+        _.bindAll(this, '_branch');
 
         // init
-        vis.setData(nodes || []);
+        tree.setData(nodes || []);
     }
 
-    _.extend(TreeVis.prototype, Backbone.Events, {
+    _.extend(TreeVis.prototype, BaseVisProto, {
 
         // -- constants ---------------------------------------------
 
@@ -131,59 +112,38 @@ define(function(require) {
         /**
          * Generate the branches for the current data.
          */
-        generate: function() {
-            // clear generated objects
-            this._branches = [];
-            this._leaves = [];
-
-            // create a seed branch (trunk)
-            var seed = this._seed();
-
-            // generate branches
-            this._branch(seed);
-
-            // generate leaves
-            this._leaf();
-        },
-
-        /**
-         * Render the tree into the given SVG
-         * @param {SVGElement} svg
-         */
-        render: function(svg, force) {
+        compute: function() {
             var tree = this;
 
-            var node = svg;
-            svg = tree._selection = d3.select(svg);
+            // clear generated objects
+            tree._branches = [];
+            tree._leaves = [];
 
-            if (!force || !tree._ready) {
-                tree._clearSvg(svg);
-                tree._setupSvg(svg);
-                tree.generate();
-                tree._ready = true;
-            }
+            // create a seed branch (trunk)
+            var seed = tree._seed();
 
-            tree._renderBranches(svg);
-            tree._renderLeaves(svg);
+            // generate branches
+            tree._branch(seed);
+
+            // generate leaves
+            tree._leaf();
         },
 
-        /**
-         * Set the data for the vis
-         * @param {Object[]} nodes
-         */
-        setData: function(nodes) {
-            this._data = nodes;
-            this._maxDepth = log2(nodes.length) - 1;
-            this._ready = false;
+        draw: function(ctx) {
+            this._renderBranches(ctx);
+            this._renderLeaves(ctx);
         },
 
-        // -- private methods ---------------------------------------
+        setData: function(data) {
+            BaseVisProto.setData.call(this, data);
+            this._maxDepth = log2(data.length) - 1;
+        },
 
         /**
          * Prep the SVG for rendering. Add symbols and such.
          * @param  {SVGElement} svg
          */
-        _setupSvg: function(svg) {
+        setup: function(svg) {
             var leafId = this.LEAF_ID;
             var sym = svg.selectAll('symbol#' + leafId).data([0]);
             sym.enter().append('symbol')
@@ -193,23 +153,7 @@ define(function(require) {
                 .attr('d', this.PATH_LEAF);
         },
 
-        /**
-         * Clear the SVG
-         * @param {SVGElement} svg
-         */
-        _clearSvg: function(svg) {
-            var n;
-            while ((n = svg.firstChild)) {
-                svg.removeChild(n);
-            }
-        },
-
-        /**
-         * Bind methods that might be called out of context
-         */
-        _bindMethods: function() {
-            _.bindAll(this, '_branch');
-        },
+        // -- private methods ---------------------------------------
 
         /**
          * Get the seed object for the tree

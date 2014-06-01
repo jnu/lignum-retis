@@ -11,6 +11,7 @@ define(function(require) {
     var React = require('react');
     var LinkListView = require('LinkListView');
     var TreeVisView = require('vis/tree/TreeVisView');
+    var ScatterVisView = require('vis/scatter/ScatterVisView');
     var TreeCollection = require('resources/TreeCollection');
 
     var IndexView = React.createClass({
@@ -26,7 +27,10 @@ define(function(require) {
             var cmp = this;
 
             function retry() {
-                if (_bail) throw new Error("Error fetching model " + id);
+                if (_bail) {
+                    throw new Error("Error fetching model " + id);
+                }
+
                 cmp.getTreeFromServer(id, cb, true);
             }
 
@@ -80,7 +84,7 @@ define(function(require) {
                         <h3>Trees</h3>
                     </section>
                     <section className="body">
-                        <TreeVisView nodes={ this.state.trees } />
+                        <ScatterVisView nodes={ this.state.trees } />
                     </section>
                 </div>
             )

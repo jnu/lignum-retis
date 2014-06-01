@@ -38,8 +38,12 @@ def get_wood(idx):
     return get_wood_from_db(idx)
 
 @app.route("/api/wood/")
+def get_woods():
+    return get_wood_from_db(False)
+
+@app.route("/api/index/")
 def get_wood_index():
-    return get_wood_from_db()
+    return get_wood_from_db(None)
 
 
 
