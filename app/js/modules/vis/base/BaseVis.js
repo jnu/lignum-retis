@@ -114,7 +114,7 @@ define(function(require) {
             var ctx = vis._selection = svg.append('g')
                 .attr(
                     'transform',
-                    'translate(' + vis._margin.top + ',' + vis._margin.bottom + ')'
+                    'translate(' + vis._margin.left + ',' + vis._margin.top + ')'
                 );
 
             if (!force || !vis._ready) {

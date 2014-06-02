@@ -1,0 +1,13 @@
+// Scatter vis styles
+//
+// Copyright 2014 Joe Nudell
+
+.scatter-vis {
+    .dot {
+        fill: $brown;
+
+        &.over {
+            fill: $red;
+        }
+    }
+}

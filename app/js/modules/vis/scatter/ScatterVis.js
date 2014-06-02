@@ -25,12 +25,16 @@ define(function(require) {
 
         vis._rScale = d3.scale.pow();
 
+        var format = d3.format('s');
+
         vis._xAxis = d3.svg.axis()
             .scale(x)
+            .tickFormat(format)
             .orient('bottom');
 
         vis._yAxis = d3.svg.axis()
             .scale(y)
+            .tickFormat(format)
             .orient('left');
 
         var margin = vis._margin;
@@ -115,7 +119,14 @@ define(function(require) {
             var xAxis = ctx.selectAll('.x.axis').data([0]);
 
             xAxis.enter().append('g')
-                .attr('class', 'x axis');
+                .attr('class', 'x axis')
+                .append('text')
+                    .attr('class', 'label')
+                    .attr('x', this._width)
+                    .attr('y', -6)
+                    .style('text-anchor', 'end')
+                    .text("Dry density");
+
 
             xAxis.attr('transform', 'translate(0,' + this._height + ')')
                 .call(this._xAxis);
@@ -123,7 +134,14 @@ define(function(require) {
             var yAxis = ctx.selectAll('.y.axis').data([0]);
 
             yAxis.enter().append('g')
-                .attr('class', 'y axis');
+                .attr('class', 'y axis')
+                .append('text')
+                    .attr('class', 'label')
+                    .attr('transform', 'rotate(-90)')
+                    .attr('y', 6)
+                    .attr('dy', '.71em')
+                    .style('text-anchor', 'end')
+                    .text("Young's modulus");
 
             yAxis.call(this._yAxis);
         },
@@ -143,7 +161,8 @@ define(function(require) {
             dots.enter().append('circle')
                 .attr('class', 'dot')
                 .attr('r', function(d) {
-                    return r(sos(d));
+                    var rad = r(sos(d));
+                    return isNaN(rad) ? 0 : rad;
                 })
                 .attr('cx', function(d) {
                     return x(d.dryWeight);
@@ -151,7 +170,16 @@ define(function(require) {
                 .attr('cy', function(d) {
                     return y(d.elastic);
                 })
-                .style('fill', '#333');
+                .on('mouseover', this._mouseOverDot)
+                .on('mouseout', this._mouseOffDot);
+        },
+
+        _mouseOverDot: function(d) {
+            d3.select(this).classed('over', true);
+        },
+
+        _mouseOffDot: function(d) {
+            d3.select(this).classed('over', false);
         },
 
         _speedOfSound: function(d) {
