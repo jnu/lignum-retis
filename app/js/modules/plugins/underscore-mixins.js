@@ -34,6 +34,9 @@ define(function(require) {
             };
         },
 
+        /**
+         * No-op
+         */
         noop: function noop() {
             /* so very empty */
         }

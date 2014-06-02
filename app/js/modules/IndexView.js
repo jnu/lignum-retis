@@ -84,7 +84,7 @@ define(function(require) {
                         <h3>Trees</h3>
                     </section>
                     <section className="body">
-                        <ScatterVisView nodes={ this.state.trees } />
+                        <ScatterVisView trees={ this.state.trees } />
                     </section>
                 </div>
             )

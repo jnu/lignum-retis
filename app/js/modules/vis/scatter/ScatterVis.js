@@ -23,6 +23,8 @@ define(function(require) {
 
         var y = vis._yScale = d3.scale.linear();
 
+        vis._rScale = d3.scale.pow();
+
         vis._xAxis = d3.svg.axis()
             .scale(x)
             .orient('bottom');
@@ -31,12 +33,14 @@ define(function(require) {
             .scale(y)
             .orient('left');
 
-        _.extend(vis._margin, {
-            left: 40,
-            bottom: 30,
-            right: 20,
-            top: 20
-        });
+        var margin = vis._margin;
+        margin.left = 40;
+        margin.bottom = 30;
+        margin.right = 20;
+        margin.top = 20;
+
+        this._width = 400;
+        this._height = 400;
 
         vis._radius = 5;
 
@@ -79,22 +83,27 @@ define(function(require) {
             var data = this._data;
             var x = this._xScale;
             var y = this._yScale;
+            var r = this._rScale;
 
             var xDomain = d3.extent(data, _.get('dryWeight'));
             var yDomain = d3.extent(data, _.get('elastic'));
+            var rDomain = d3.extent(data, this._speedOfSound);
 
             if (!data.length) {
                 xDomain = [0, 1];
                 yDomain = [0, 1];
+                rDomain = [0, 1];
             }
 
             // set domains
             x.domain(xDomain).nice();
             y.domain(yDomain).nice();
+            r.domain(rDomain).nice();
 
             // set ranges
-            x.range(this._width);
-            y.range(this._height);
+            x.range([0, this._width]);
+            y.range([this._height, 0]);
+            r.range([1, 10]);
         },
 
         /**
@@ -108,7 +117,8 @@ define(function(require) {
             xAxis.enter().append('g')
                 .attr('class', 'x axis');
 
-            xAxis.call(this._xAxis);
+            xAxis.attr('transform', 'translate(0,' + this._height + ')')
+                .call(this._xAxis);
 
             var yAxis = ctx.selectAll('.y.axis').data([0]);
 
@@ -127,10 +137,14 @@ define(function(require) {
             var dots = ctx.selectAll('.dot').data(this._data);
             var x = this._xScale;
             var y = this._yScale;
+            var r = this._rScale;
+            var sos = this._speedOfSound;
 
             dots.enter().append('circle')
                 .attr('class', 'dot')
-                .attr('r', this._radius)
+                .attr('r', function(d) {
+                    return r(sos(d));
+                })
                 .attr('cx', function(d) {
                     return x(d.dryWeight);
                 })
@@ -138,6 +152,12 @@ define(function(require) {
                     return y(d.elastic);
                 })
                 .style('fill', '#333');
+        },
+
+        _speedOfSound: function(d) {
+            if (d.elastic && d.dryWeight) {
+                return Math.sqrt(d.elastic / d.dryWeight);
+            }
         }
 
     });

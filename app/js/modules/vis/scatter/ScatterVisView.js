@@ -16,16 +16,16 @@ define(function(requre) {
         _scatterVis: null,
 
         getDefaultProps: function() {
-            this._scatterVis = new ScatterVis(this.props.data);
+            this._scatterVis = new ScatterVis(this.props.trees);
 
             return {
-                data: []
+                trees: []
             };
         },
 
         componentWillReceiveProps: function(nextProps) {
-            if (nextProps.data) {
-                this._scatterVis.setData(nextProps.data);
+            if (nextProps.trees) {
+                this._scatterVis.setData(nextProps.trees);
             }
         },
 
