@@ -13,6 +13,10 @@ define(function(require) {
 
     var LinkListView = React.createClass({
 
+        propTypes: {
+            links: React.PropTypes.array
+        },
+
         render: function() {
             var cmp = this;
 
